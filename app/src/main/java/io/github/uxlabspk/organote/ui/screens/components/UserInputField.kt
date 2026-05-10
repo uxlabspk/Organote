@@ -34,6 +34,30 @@ fun UserInputField(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         when (type) {
+            InputTypes.Name -> {
+                Text(
+                    text = "Name",
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                TextField(
+                    value = value.value,
+                    onValueChange = onValueChange,
+                    placeholder = { Text("Luna Rose", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium,
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                    ),
+                    singleLine = true
+                )
+            }
             InputTypes.Email -> {
                 Text(
                     text = "Email Address",
