@@ -25,21 +25,33 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.uxlabspk.organote.data.model.InputTypes
 import io.github.uxlabspk.organote.ui.screens.components.UserButton
 import io.github.uxlabspk.organote.ui.screens.components.UserInputField
+import io.github.uxlabspk.organote.ui.viewmodel.LoginViewModel
 
 @Composable
-fun LoginScreen() {
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
+fun LoginScreen(
+    onLoginSuccess: () -> Unit = {},
+    onSignupClick: () -> Unit = {},
+    viewModel: LoginViewModel = viewModel()
+) {
+    val email = viewModel.email
+    val password = viewModel.password
+
+    // Observe login success event from ViewModel
+    LaunchedEffect(Unit) {
+        viewModel.loginSuccess.collect {
+            onLoginSuccess()
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -102,7 +114,7 @@ fun LoginScreen() {
                 UserInputField(
                     type = InputTypes.Email,
                     value = email,
-                    onValueChange = { email.value = it }
+                    onValueChange = { viewModel.onEmailChange(it) }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -110,7 +122,7 @@ fun LoginScreen() {
                 UserInputField(
                     type = InputTypes.Password,
                     value = password,
-                    onValueChange = { password.value = it }
+                    onValueChange = { viewModel.onPasswordChange(it) }
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -118,7 +130,7 @@ fun LoginScreen() {
                 // Sign In Button
                 UserButton(
                     text = "Sign In",
-                    onClick = { /* TODO */ }
+                    onClick = { viewModel.login() }
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -134,7 +146,7 @@ fun LoginScreen() {
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    TextButton(onClick = { /* TODO */ }, contentPadding = PaddingValues(0.dp)) {
+                    TextButton(onClick = onSignupClick, contentPadding = PaddingValues(0.dp)) {
                         Text(
                             text = "Create an account",
                             style = MaterialTheme.typography.bodyMedium,
@@ -154,7 +166,5 @@ fun LoginScreen() {
 )
 @Composable
 fun LoginScreenPreview() {
-
-        LoginScreen()
-
+    LoginScreen()
 }

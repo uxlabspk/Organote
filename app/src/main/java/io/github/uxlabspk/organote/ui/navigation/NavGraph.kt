@@ -7,8 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import io.github.uxlabspk.organote.ui.screens.LoginScreen
+import io.github.uxlabspk.organote.ui.screens.MainScreen
 import io.github.uxlabspk.organote.ui.screens.NoteDetailScreen
-import io.github.uxlabspk.organote.ui.screens.NoteScreen
+import io.github.uxlabspk.organote.ui.screens.SignupScreen
 import kotlinx.serialization.Serializable
 
 
@@ -16,7 +17,10 @@ import kotlinx.serialization.Serializable
 object LoginRoute
 
 @Serializable
-object NoteListRoute
+object SignupRoute
+
+@Serializable
+object MainRoute
 
 @Serializable
 data class NoteDetailRoute(val noteId: Int)
@@ -32,16 +36,35 @@ fun OrganoteNavHost(
         modifier = modifier
     ) {
         composable<LoginRoute> {
-            LoginScreen()
-        }
-
-        composable<NoteListRoute> {
-            NoteScreen(
-                onNoteClick = { noteId ->
-                    navController.navigate(NoteDetailRoute(noteId))
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(MainRoute) {
+                        popUpTo(LoginRoute) { inclusive = true }
+                    }
+                },
+                onSignupClick = {
+                    navController.navigate(SignupRoute)
                 }
             )
         }
+
+        composable<SignupRoute> {
+            SignupScreen(
+                onSignupSuccess = {
+                    navController.navigate(MainRoute) {
+                        popUpTo(LoginRoute) { inclusive = true }
+                    }
+                },
+                onBackToLogin = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable<MainRoute> {
+            MainScreen(rootNavController = navController)
+        }
+
         composable<NoteDetailRoute> { backStackEntry ->
             val route: NoteDetailRoute = backStackEntry.toRoute()
             NoteDetailScreen(
