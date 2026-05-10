@@ -6,9 +6,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import io.github.uxlabspk.organote.ui.screens.LoginScreen
 import io.github.uxlabspk.organote.ui.screens.NoteDetailScreen
 import io.github.uxlabspk.organote.ui.screens.NoteScreen
 import kotlinx.serialization.Serializable
+
+
+@Serializable
+object LoginRoute
 
 @Serializable
 object NoteListRoute
@@ -23,9 +28,13 @@ fun OrganoteNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = NoteListRoute,
+        startDestination = LoginRoute,
         modifier = modifier
     ) {
+        composable<LoginRoute> {
+            LoginScreen()
+        }
+
         composable<NoteListRoute> {
             NoteScreen(
                 onNoteClick = { noteId ->
