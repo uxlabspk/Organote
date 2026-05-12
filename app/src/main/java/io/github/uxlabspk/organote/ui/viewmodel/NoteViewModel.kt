@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class NoteViewModel(private val repository: NoteRepository = NoteRepository()) : ViewModel() {
+class NoteViewModel : ViewModel() {
     private val _notes = MutableStateFlow<List<Note>>(emptyList())
     val notes: StateFlow<List<Note>> = _notes.asStateFlow()
 
@@ -15,7 +15,26 @@ class NoteViewModel(private val repository: NoteRepository = NoteRepository()) :
         loadNotes()
     }
 
-    private fun loadNotes() {
-        _notes.value = repository.getNotes()
+    fun loadNotes() {
+        _notes.value = NoteRepository.getNotes()
+    }
+
+    fun getNoteById(id: Int): Note? {
+        return NoteRepository.getNoteById(id)
+    }
+
+    fun saveNote(id: Int, title: String, content: String) {
+        if (id == -1) {
+            val newId = (notes.value.maxOfOrNull { it.id } ?: 0) + 1
+            NoteRepository.addNote(Note(newId, title, content))
+        } else {
+            NoteRepository.updateNote(Note(id, title, content))
+        }
+        loadNotes()
+    }
+
+    fun deleteNote(id: Int) {
+        NoteRepository.deleteNote(id)
+        loadNotes()
     }
 }

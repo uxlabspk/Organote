@@ -17,12 +17,14 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -33,6 +35,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import io.github.uxlabspk.organote.R
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -44,12 +47,17 @@ object SearchRoute
 @Serializable
 object ProfileRoute
 
-data class TopLevelRoute<T : Any>(val name: String, val route: T, val icon: ImageVector)
+sealed class IconSource {
+    data class Vector(val imageVector: ImageVector) : IconSource()
+    data class Resource(val resId: Int) : IconSource()
+}
+
+data class TopLevelRoute<T : Any>(val name: String, val route: T, val icon: IconSource)
 
 val TOP_LEVEL_ROUTES = listOf(
-    TopLevelRoute("Notes", HomeRoute, Icons.Default.MailOutline),
-    TopLevelRoute("Archive", SearchRoute, Icons.Default.AccountBox),
-    TopLevelRoute("Settings", ProfileRoute, Icons.Default.Settings)
+    TopLevelRoute("Notes", HomeRoute, IconSource.Resource(R.drawable.ic_notes)),
+    TopLevelRoute("Archive", SearchRoute, IconSource.Resource(R.drawable.ic_archive)),
+    TopLevelRoute("Settings", ProfileRoute, IconSource.Vector(Icons.Default.Settings))
 )
 
 @Composable
@@ -77,12 +85,23 @@ fun MainScreen(
 
                     NavigationBarItem(
                         icon = {
-                            Icon(
-                                imageVector = topLevelRoute.icon,
-                                contentDescription = topLevelRoute.name,
-                                modifier = Modifier.size(24.dp),
-                                tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                            )
+                            val iconModifier = Modifier.size(24.dp)
+                            val tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+
+                            when (val iconSource = topLevelRoute.icon) {
+                                is IconSource.Vector -> Icon(
+                                    imageVector = iconSource.imageVector,
+                                    contentDescription = topLevelRoute.name,
+                                    modifier = iconModifier,
+                                    tint = tint
+                                )
+                                is IconSource.Resource -> Icon(
+                                    painter = painterResource(id = iconSource.resId),
+                                    contentDescription = topLevelRoute.name,
+                                    modifier = iconModifier,
+                                    tint = tint
+                                )
+                            }
                         },
                         label = {
                             Text(
