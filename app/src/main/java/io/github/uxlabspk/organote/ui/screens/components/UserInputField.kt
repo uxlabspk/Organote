@@ -20,11 +20,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import io.github.uxlabspk.organote.R
 import io.github.uxlabspk.organote.data.model.InputTypes
+import io.github.uxlabspk.organote.ui.screens.IconSource
 
 @Composable
 fun UserInputField(
@@ -103,9 +106,9 @@ fun UserInputField(
                     shape = MaterialTheme.shapes.medium,
                     visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
-                        val image = if (passwordVisible.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder
+                        val image = if (passwordVisible.value) R.drawable.ic_eye_off else R.drawable.ic_eye_on
                         IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
-                            Icon(imageVector = image, contentDescription = null)
+                            Icon(painter = painterResource(image), contentDescription = null)
                         }
                     },
                     colors = TextFieldDefaults.colors(

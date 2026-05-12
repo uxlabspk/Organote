@@ -28,10 +28,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.uxlabspk.organote.R
 import io.github.uxlabspk.organote.data.model.InputTypes
 import io.github.uxlabspk.organote.ui.screens.components.UserButton
 import io.github.uxlabspk.organote.ui.screens.components.UserInputField
@@ -60,100 +62,89 @@ fun LoginScreen(
             .padding(0.dp),
         contentAlignment = Alignment.Center
     ) {
-        Card(
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(3.dp)
-                .wrapContentHeight()
-                .verticalScroll(rememberScrollState()),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
-            ),
+                .padding(24.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(24.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+            // Logo
+            Surface(
+                modifier = Modifier.size(56.dp),
+                shape = MaterialTheme.shapes.medium,
+                color = MaterialTheme.colorScheme.primary
             ) {
-                // Logo
-                Surface(
-                    modifier = Modifier.size(56.dp),
-                    shape = MaterialTheme.shapes.medium,
-                    color = MaterialTheme.colorScheme.primary
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(12.dp)
-                            .fillMaxSize(),
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // Title & Subtitle
-                Text(
-                    text = "Organote",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                Icon(
+                    painter = painterResource(R.drawable.ic_notes),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .fillMaxSize(),
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Title & Subtitle
+            Text(
+                text = "Organote",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = "Capture your thoughts with clarity",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Input Fields
+            UserInputField(
+                type = InputTypes.Email,
+                value = email,
+                onValueChange = { viewModel.onEmailChange(it) }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            UserInputField(
+                type = InputTypes.Password,
+                value = password,
+                onValueChange = { viewModel.onPasswordChange(it) }
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Sign In Button
+            UserButton(
+                text = "Sign In",
+                onClick = { viewModel.login() }
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Footer
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    text = "Capture your thoughts with clarity",
+                    text = "Don't have an account? ",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 8.dp)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // Input Fields
-                UserInputField(
-                    type = InputTypes.Email,
-                    value = email,
-                    onValueChange = { viewModel.onEmailChange(it) }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                UserInputField(
-                    type = InputTypes.Password,
-                    value = password,
-                    onValueChange = { viewModel.onPasswordChange(it) }
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // Sign In Button
-                UserButton(
-                    text = "Sign In",
-                    onClick = { viewModel.login() }
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // Footer
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                TextButton(onClick = onSignupClick, contentPadding = PaddingValues(0.dp)) {
                     Text(
-                        text = "Don't have an account? ",
+                        text = "Create an account",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
                     )
-                    TextButton(onClick = onSignupClick, contentPadding = PaddingValues(0.dp)) {
-                        Text(
-                            text = "Create an account",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
                 }
             }
         }

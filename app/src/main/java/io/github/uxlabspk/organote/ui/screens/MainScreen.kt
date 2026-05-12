@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -57,7 +58,7 @@ data class TopLevelRoute<T : Any>(val name: String, val route: T, val icon: Icon
 val TOP_LEVEL_ROUTES = listOf(
     TopLevelRoute("Notes", HomeRoute, IconSource.Resource(R.drawable.ic_notes)),
     TopLevelRoute("Archive", SearchRoute, IconSource.Resource(R.drawable.ic_archive)),
-    TopLevelRoute("Settings", ProfileRoute, IconSource.Vector(Icons.Default.Settings))
+    TopLevelRoute("Profile", ProfileRoute, IconSource.Vector(Icons.Default.AccountCircle))
 )
 
 @Composable

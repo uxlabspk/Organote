@@ -25,10 +25,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.uxlabspk.organote.R
 import io.github.uxlabspk.organote.data.model.InputTypes
 import io.github.uxlabspk.organote.ui.screens.components.UserButton
 import io.github.uxlabspk.organote.ui.screens.components.UserInputField
@@ -70,7 +72,7 @@ fun SignupScreen(
                 color = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
-                    imageVector = Icons.Default.Delete,
+                    painter = painterResource(R.drawable.ic_notes),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(12.dp)
